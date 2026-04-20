@@ -1,0 +1,16 @@
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+
+@Entity()
+export class CartItem {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
+  cartId: number;
+
+  @Column()
+  productId: number;
+
+  @Column()
+  quantity: number;
+}
