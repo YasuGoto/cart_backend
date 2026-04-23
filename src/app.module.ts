@@ -9,6 +9,9 @@ import { CartItem } from './entities/cartItem.entity';
 import { Order } from './entities/order.entity';
 import { OrderItem } from './entities/orderItem.entity';
 import { Payment } from './entities/payment.entity';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
+import { ProductModule } from './product/product.module';
 
 @Module({
   imports: [
@@ -22,6 +25,9 @@ import { Payment } from './entities/payment.entity';
       entities: [User, Product, Cart, CartItem, Order, OrderItem, Payment],
       synchronize: true,
     }),
+    AuthModule,
+    UsersModule,
+    ProductModule,
   ],
   controllers: [AppController],
   providers: [AppService],
