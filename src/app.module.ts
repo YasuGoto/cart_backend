@@ -12,6 +12,7 @@ import { Payment } from './entities/payment.entity';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { ProductModule } from './product/product.module';
+import { CartModule } from './cart/cart.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { ProductModule } from './product/product.module';
     AuthModule,
     UsersModule,
     ProductModule,
+    CartModule,
   ],
   controllers: [AppController],
   providers: [AppService],
