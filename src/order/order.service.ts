@@ -30,30 +30,29 @@ export class OrderService {
     const cartItems = await this.cartItemRepository.find({
       where: { cartId: cart.id },
     });
-
-    let totalAmount = 0;
+    const productMap = new Map<number, Product>();
     for (const item of cartItems) {
       const product = await this.productRepository.findOne({
         where: { id: item.productId },
       });
-      if (!product) {
-        throw new Error('Product not found');
-      }
+      if (!product) throw new Error('Product not found');
+      productMap.set(item.productId, product);
+    }
+
+    let totalAmount = 0;
+    for (const item of cartItems) {
+      const product = productMap.get(item.productId);
+      if (!product) throw new Error('Product not found');
       totalAmount += product.price * item.quantity;
     }
 
     const order = await this.orderRepository.save(
       this.orderRepository.create({ userId, totalAmount: totalAmount }),
     );
-    const orderItems: OrderItem[] = [];
     for (const item of cartItems) {
-      const product = await this.productRepository.findOne({
-        where: { id: item.productId },
-      });
-      if (!product) {
-        throw new Error('Product not found');
-      }
-      const orderItem = await this.orderItemRepository.save(
+      const product = productMap.get(item.productId);
+      if (!product) throw new Error('Product not found');
+      await this.orderItemRepository.save(
         this.orderItemRepository.create({
           orderId: order.id,
           productId: item.productId,
@@ -61,7 +60,6 @@ export class OrderService {
           price: product.price,
         }),
       );
-      orderItems.push(orderItem);
     }
     return order;
   }
